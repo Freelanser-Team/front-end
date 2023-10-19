@@ -1,0 +1,12 @@
+.circle-backGround {
+  fill: none;
+  stroke: #ddd;
+}
+.circle-progress {
+  fill: none;
+  stroke: #a74eff;
+}
+.persentage {
+  color: #a74eff;
+  top: 57%;
+}

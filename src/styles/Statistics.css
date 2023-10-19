@@ -1,0 +1,23 @@
+.list li span {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background: #000;
+  margin-left: 10px;
+}
+.list li {
+  color: #acacac;
+  font-weight: bold;
+}
+.list li span.west {
+  background: #5a9bd5;
+}
+.list li span.east {
+  background: #6eac46;
+}
+.list li span.south {
+  background: #a74eff;
+}
+.list li span.north {
+  background: #ff3030;
+}

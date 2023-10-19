@@ -1,0 +1,52 @@
+.tab-pane h2 {
+  color: #5a9bd5;
+  font-size: 40px;
+  font-weight: 700;
+}
+.tab-pane p {
+  color: #000;
+  font-size: 25px;
+  font-weight: 400;
+}
+.card h4 {
+  color: #acacac;
+}
+.form-select::-ms-expand,
+.form-select::-webkit-select-arrow {
+  display: none;
+}
+.form-select {
+  appearance: none;
+  background-image: url("");
+  padding-right: 20px;
+  height: 70px;
+}
+.input-field {
+  position: relative;
+}
+.arrowDown {
+  width: 20px;
+  position: absolute;
+  font-weight: bold;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 5px;
+  color: #acacac;
+}
+
+table tr {
+  height: 80px;
+  text-align: center;
+}
+table thead tr th {
+  color: #acacac;
+}
+table tbody tr th,
+table tbody tr td {
+  color: #525252;
+  min-width: 150px;
+}
+.lastPage a {
+  text-decoration: none;
+  color: #5a9bd5;
+}
