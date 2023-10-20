@@ -1,77 +1,98 @@
+import { useFormik } from "formik";
 import React from "react";
-
+import { NavLink } from "react-router-dom";
+import "../../styles/Login.css";
 export function Login() {
+  const initialValues = { Email: "", Password: "" };
+  const onSubmit = (values) => {
+    return values;
+  };
+  const validate = (values) => {
+    const errors = {};
+    if (!values.Email) {
+      errors.Email = "* هذا الحقل مطلوب ادخاله";
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.Email)
+    ) {
+      errors.Email = " * قم بادخال بلايد الكترونى صحيح";
+    }
+
+    if (!values.Password) {
+      errors.Password = "* هذا الحقل مطلوب ادخاله";
+    } else if (values.Password.length < 5) {
+      errors.Password = "* من فضلك قم بأدخال كلمة مرور صحيحة";
+    }
+
+    return errors;
+  };
+  const formik = useFormik({ initialValues, onSubmit, validate });
   return (
-    <section className="h-100">
-      <div className="container h-100">
-        <div className="row justify-content-sm-center h-100">
-          <div className="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
-            <div className="card shadow-lg">
-              <div className="card-body p-5">
-                <h1 className="fs-4 card-title fw-bold mb-4">تسجيل الدخول</h1>
-                <form
-                  method="POST"
-                  className="needs-validation"
-                  novalidate=""
-                  autocomplete="off"
-                >
-                  <div className="mb-3">
-                    <label className="mb-2 text-muted" for="email">
-                      عنوان البريد الإلكتروني
-                    </label>
-                    <input
-                      id="email"
-                      type="email"
-                      className="form-control"
-                      name="email"
-                      value=""
-                      required
-                      autofocus
-                    />
-
-                    <div className="invalid-feedback">
-                      البريد الإلكتروني غير صالح
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <div className="mb-2 w-100">
-                      <label className="text-muted" for="password">
-                        كلمة المرور
-                      </label>
-                      <a href="forgot.html" className="float-end">
-                        نسيت كلمة المرور؟
-                      </a>
-                    </div>
-                    <input
-                      id="password"
-                      type="password"
-                      className="form-control"
-                      name="password"
-                      required
-                    />
-                    <div className="invalid-feedback">كلمة المرور مطلوبة</div>
-                  </div>
-
-                  <div className="d-flex align-items-center">
-                    <button type="submit" className="btn btn-primary ms-auto">
-                      تسجيل الدخول
-                    </button>
-                  </div>
-                </form>
+    <div className="row gx-0 login">
+      <div className="col-11 col-sm-8 col-md-6 col-lg-4 mx-auto">
+        <div className="shadow-lg">
+          <div className="bg-light p-5">
+            <h1 className="fs-3 fw-bold mb-4">تسجيل الدخول</h1>
+            <form onSubmit={formik.handleSubmit}>
+              <div>
+                <label className="mb-3 fw-bold" htmlFor="email">
+                  البريد الإلكتروني
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className="form-control mb-3"
+                  name="Email"
+                  onChange={formik.handleChange}
+                  value={formik.values.Email}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.Email && formik.errors.Email ? (
+                  <p className="text-danger fw-bold     ">
+                    {formik.errors.Email}
+                  </p>
+                ) : null}
+                <label className="mb-3" htmlFor="password">
+                  كلمة المرور
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  className="form-control mb-3"
+                  name="Password"
+                  onChange={formik.handleChange}
+                  value={formik.values.Password}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.Password && formik.errors.Password ? (
+                  <p className="text-danger fw-bold ">
+                    {formik.errors.Password}
+                  </p>
+                ) : null}
+                <NavLink to="/forgot" className="mt-2">
+                  هل نسيت كلمة المرور ؟
+                </NavLink>
               </div>
-              <div className="card-footer py-3 border-0">
-                <div className="text-center">
-                  ليس لديك حساب؟{" "}
-                  <a href="register.html" className="text-dark">
-                    أنشئ حسابًا
-                  </a>
-                </div>
-              </div>
+              <button
+                type="submit"
+                className="d-block mx-auto mt-2 btn btn-primary"
+              >
+                تسجيل الدخول
+              </button>
+            </form>
+          </div>
+          <div className="card-footer py-3 border-0">
+            <div className="text-center">
+              ليس لديك حساب ؟
+              <NavLink
+                to="/register"
+                className="me-1 text-danger fw-bold text-decoration-underline "
+              >
+                أنشئ حسابًا
+              </NavLink>
             </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }

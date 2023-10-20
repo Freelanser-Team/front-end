@@ -8,12 +8,10 @@ export function Statistics() {
     { name: "G1", value: 200 },
     { name: "G2", value: 400 },
     { name: "G3", value: 500 },
-    { name: "G4", value: 300 },
-    { name: "G5", value: 600 },
   ];
   const circleWidth = 200;
   const radius = 85;
-  const persentage = 45.2;
+  const persentage = 25;
   const dashArray = radius * Math.PI * 2;
   const dashOffset = dashArray - (dashArray * persentage) / 100;
 
