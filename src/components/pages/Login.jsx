@@ -14,12 +14,12 @@ export function Login() {
     } else if (
       !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.Email)
     ) {
-      errors.Email = " * قم بادخال بلايد الكترونى صحيح";
+      errors.Email = " * قم بادخال بريد الكترونى صحيح";
     }
 
     if (!values.Password) {
       errors.Password = "* هذا الحقل مطلوب ادخاله";
-    } else if (values.Password.length < 5) {
+    } else if (values.Password.length < 8) {
       errors.Password = "* من فضلك قم بأدخال كلمة مرور صحيحة";
     }
 
