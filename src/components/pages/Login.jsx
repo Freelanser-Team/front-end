@@ -1,38 +1,46 @@
 import { useFormik } from "formik";
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { initialValues, validate } from "../validation/loginValidation";
+
 import "../../styles/Login.css";
+import ApiService from "../../server/ApiService";
+import { SIGN_IN } from "../../server/Constants";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 export function Login() {
-  const initialValues = { Email: "", Password: "" };
+  const notify = (message, type) =>
+    toast(message, {
+      position: "top-right",
+    });
+
   const onSubmit = (values) => {
-    return values;
-  };
-  const validate = (values) => {
-    const errors = {};
-    if (!values.Email) {
-      errors.Email = "* هذا الحقل مطلوب ادخاله";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.Email)
-    ) {
-      errors.Email = " * قم بادخال بريد الكترونى صحيح";
-    }
-
-    if (!values.Password) {
-      errors.Password = "* هذا الحقل مطلوب ادخاله";
-    } else if (values.Password.length < 8) {
-      errors.Password = "* من فضلك قم بأدخال كلمة مرور صحيحة";
-    }
-
-    return errors;
+    console.log("--------------->", values);
+    const apiService = ApiService.getInstance();
+    apiService
+      .postData(SIGN_IN, values)
+      .then((response) => {
+        console.log("response--------------->", response?.data?.message);
+        if (response?.data?.message === "success") {
+          notify(response?.data?.message || "");
+          localStorage.setItem("token", response.data.token);
+        }
+      })
+      .catch((err) => {
+        console.log("err--------------->", err);
+      });
   };
   const formik = useFormik({ initialValues, onSubmit, validate });
+
   return (
     <div className="row gx-0 login">
       <div className="col-11 col-sm-8 col-md-6 col-lg-4 mx-auto">
         <div className="shadow-lg">
           <div className="bg-light p-5">
             <h1 className="fs-3 fw-bold mb-4">تسجيل الدخول</h1>
-            <form onSubmit={formik.handleSubmit}>
+            <form action="POST" onSubmit={formik.handleSubmit}>
               <div>
                 <label className="mb-3 fw-bold" htmlFor="email">
                   البريد الإلكتروني
@@ -41,14 +49,14 @@ export function Login() {
                   id="email"
                   type="email"
                   className="form-control mb-3"
-                  name="Email"
+                  name="email"
                   onChange={formik.handleChange}
-                  value={formik.values.Email}
+                  value={formik.values.email}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.Email && formik.errors.Email ? (
+                {formik.touched.email && formik.errors.email ? (
                   <p className="text-danger fw-bold     ">
-                    {formik.errors.Email}
+                    {formik.errors.email}
                   </p>
                 ) : null}
                 <label className="mb-3" htmlFor="password">
@@ -58,14 +66,14 @@ export function Login() {
                   id="password"
                   type="password"
                   className="form-control mb-3"
-                  name="Password"
+                  name="password"
                   onChange={formik.handleChange}
-                  value={formik.values.Password}
+                  value={formik.values.password}
                   onBlur={formik.handleBlur}
                 />
-                {formik.touched.Password && formik.errors.Password ? (
+                {formik.touched.password && formik.errors.password ? (
                   <p className="text-danger fw-bold ">
-                    {formik.errors.Password}
+                    {formik.errors.password}
                   </p>
                 ) : null}
                 <NavLink to="/forgot" className="mt-2">
@@ -93,6 +101,7 @@ export function Login() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

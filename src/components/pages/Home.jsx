@@ -37,7 +37,7 @@ export function Home() {
             jsname="L5Fo6c"
             className="YMEQtf"
             sandbox="allow-scripts allow-popups allow-forms allow-same-origin allow-popups-to-escape-sandbox allow-downloads allow-modals"
-            frameborder="0"
+            frameBorder="0"
             title="YouTube Video: برنامج يوم الهمة لحلقات التحفيظ"
             src="https://www.youtube.com/embed/9RJyYDS3NAg"
             allowfullscreen=""
