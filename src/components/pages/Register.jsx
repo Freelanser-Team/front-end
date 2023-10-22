@@ -2,41 +2,34 @@ import React from "react";
 import "../../styles/Register.css";
 import { NavLink } from "react-router-dom";
 import { useFormik } from "formik";
+import { initialValues, validate } from "../validation/RegisterValidation";
+import ApiService from "../../server/ApiService";
+import { SIGN_UP } from "../../server/Constants";
+import { ToastContainer, toast } from "react-toastify";
+
 export function Register() {
-  const initialValues = { Name: "", Email: "", Password: "" };
+  const notify = (message) =>
+    toast(message, {
+      position: "top-right",
+    });
   const onSubmit = (values) => {
-    return values;
-  };
-
-  const validate = (values) => {
-    const errors = {};
-    // name validation
-    if (!values.Name) {
-      errors.Name = "* هذا الحقل مطلوب ادخاله";
-    } else if (values.Name.length < 3) {
-      errors.Name = "* من فضلك قم بادخال اسم صحيح على الاقل ثلاثة أحرف";
-    } else if (values.Name.length > 8) {
-      errors.Name = "*  من فضلك قم بادخال اسم صحيح اقل من 8 أحرف";
-    }
-
-    // Email validation
-    if (!values.Email) {
-      errors.Email = "* هذا الحقل مطلوب ادخاله";
-    } else if (
-      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.Email)
-    ) {
-      errors.Email = " * قم بادخال بريد الكترونى صحيح";
-    }
-    // password validation
-    if (!values.Password) {
-      errors.Password = "* هذا الحقل مطلوب ادخاله";
-    } else if (
-      !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,30}$/i.test(values.Password)
-    ) {
-      errors.Password = "*  قم بادخال كلمة مرور صحيحة ";
-    }
-
-    return errors;
+    const apiServer = ApiService.getInstance();
+    apiServer
+      .postData(SIGN_UP, values)
+      .then((response) => {
+        console.log("response--------------->", response?.data?.message);
+        if (response?.data?.message === "success") {
+          notify("لقد تم تسجيل دخولك بنجاح");
+          localStorage.setItem("token", response.data.token);
+        }
+      })
+      .catch((err) => {
+        if (err.response.data.err === "Email Already Existed") {
+          notify(
+            "هذا البريد الاكترونى مستخدم بالفعل  - رجاءا ادخل بريد الكترونى اخر"
+          );
+        }
+      });
   };
   const formik = useFormik({ initialValues, onSubmit, validate });
   return (
@@ -54,12 +47,12 @@ export function Register() {
                 type="text"
                 className="form-control mb-3"
                 onChange={formik.handleChange}
-                value={formik.values.Name}
+                value={formik.values.name}
                 onBlur={formik.handleBlur}
-                name="Name"
+                name="name"
               />
-              {formik.touched.Name && formik.errors.Name ? (
-                <p className="text-danger fw-bold my-2">{formik.errors.Name}</p>
+              {formik.touched.name && formik.errors.name ? (
+                <p className="text-danger fw-bold my-2">{formik.errors.name}</p>
               ) : null}
               <label className="mb-3 fw-bold" htmlFor="email">
                 عنوان البريد الإلكتروني
@@ -69,13 +62,13 @@ export function Register() {
                 type="email"
                 className="form-control mb-3"
                 onChange={formik.handleChange}
-                value={formik.values.Email}
+                value={formik.values.email}
                 onBlur={formik.handleBlur}
-                name="Email"
+                name="email"
               />
-              {formik.touched.Email && formik.errors.Email ? (
+              {formik.touched.email && formik.errors.email ? (
                 <p className="text-danger fw-bold my-2">
-                  {formik.errors.Email}
+                  {formik.errors.email}
                 </p>
               ) : null}
               <label className="mb-3 fw-bold" htmlFor="password">
@@ -86,13 +79,13 @@ export function Register() {
                 type="password"
                 className="form-control mb-3"
                 onChange={formik.handleChange}
-                value={formik.values.Password}
+                value={formik.values.password}
                 onBlur={formik.handleBlur}
-                name="Password"
+                name="password"
               />
-              {formik.touched.Password && formik.errors.Password ? (
+              {formik.touched.password && formik.errors.password ? (
                 <p className="text-danger fw-bold my-2">
-                  {formik.errors.Password}
+                  {formik.errors.password}
                 </p>
               ) : null}
               <p className="mb-3">بالتسجيل، أنت توافق على شروطنا وأحكامنا.</p>
@@ -113,6 +106,7 @@ export function Register() {
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

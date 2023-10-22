@@ -40,7 +40,7 @@ export function Home() {
             frameBorder="0"
             title="YouTube Video: برنامج يوم الهمة لحلقات التحفيظ"
             src="https://www.youtube.com/embed/9RJyYDS3NAg"
-            allowfullscreen=""
+            allowFullScreen=""
           ></iframe>
           <div className=" text-center mt-5">
             <button className="btn btn-primary m-2">شروحات البرنامج</button>

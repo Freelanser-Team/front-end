@@ -11,7 +11,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export function Login() {
-  const notify = (message, type) =>
+  const notify = (message) =>
     toast(message, {
       position: "top-right",
     });
@@ -22,14 +22,15 @@ export function Login() {
     apiService
       .postData(SIGN_IN, values)
       .then((response) => {
-        console.log("response--------------->", response?.data?.message);
         if (response?.data?.message === "success") {
-          notify(response?.data?.message || "");
+          notify(" تم تسجيل دخولك مرحبا بك");
           localStorage.setItem("token", response.data.token);
         }
       })
       .catch((err) => {
-        console.log("err--------------->", err);
+        if (err) {
+          notify("بريد الكترونى او كلمة مرور غير صحيحه");
+        }
       });
   };
   const formik = useFormik({ initialValues, onSubmit, validate });
@@ -39,7 +40,7 @@ export function Login() {
       <div className="col-11 col-sm-8 col-md-6 col-lg-4 mx-auto">
         <div className="shadow-lg">
           <div className="bg-light p-5">
-            <h1 className="fs-3 fw-bold mb-4">تسجيل الدخول</h1>
+            <h1 className="fs-3 fw-bold mb-4 text-center">تسجيل الدخول</h1>
             <form action="POST" onSubmit={formik.handleSubmit}>
               <div>
                 <label className="mb-3 fw-bold" htmlFor="email">
@@ -55,11 +56,9 @@ export function Login() {
                   onBlur={formik.handleBlur}
                 />
                 {formik.touched.email && formik.errors.email ? (
-                  <p className="text-danger fw-bold     ">
-                    {formik.errors.email}
-                  </p>
+                  <p className="text-danger fw-bold">{formik.errors.email}</p>
                 ) : null}
-                <label className="mb-3" htmlFor="password">
+                <label className="mb-3 fw-bold" htmlFor="password">
                   كلمة المرور
                 </label>
                 <input
