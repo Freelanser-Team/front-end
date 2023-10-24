@@ -1,6 +1,6 @@
 import React from "react";
 import "../../styles/Register.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import { initialValues, validate } from "../validation/RegisterValidation";
 import ApiService from "../../server/ApiService";
@@ -8,10 +8,12 @@ import { SIGN_UP } from "../../server/Constants";
 import { ToastContainer, toast } from "react-toastify";
 
 export function Register() {
+  const navigate = useNavigate();
   const notify = (message) =>
     toast(message, {
       position: "top-right",
     });
+
   const onSubmit = (values) => {
     const apiServer = ApiService.getInstance();
     apiServer
@@ -20,13 +22,19 @@ export function Register() {
         console.log("response--------------->", response?.data?.message);
         if (response?.data?.message === "success") {
           notify("لقد تم تسجيل دخولك بنجاح");
-          localStorage.setItem("token", response.data.token);
+          console.log(response.data);
+
+          setTimeout(() => {
+            navigate("/login");
+          }, 3000);
         }
       })
       .catch((err) => {
+        console.log("err--------------->", err);
+
         if (err.response.data.err === "Email Already Existed") {
           notify(
-            "هذا البريد الاكترونى مستخدم بالفعل  - رجاءا ادخل بريد الكترونى اخر"
+            "هذا البريد الإلكتروني مستخدم بالفعل - رجاءً أدخل بريدًا إلكترونيًا آخر"
           );
         }
       });
